@@ -47,8 +47,8 @@ pipeline {
                 sh "git merge --ff ${env.GIT_COMMIT}"
                 script {
                     String gitRepo = "${env.GIT_URL}".substring(8)
-                    withCredentials([usernamePassword(credentialsId: 'git-credentials', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
-                        sh "git -c http.sslVerify=false push https://${GIT_USERNAME}:${GIT_PASSWORD}@${gitRepo} HEAD:develop"
+                    withCredentials([string(credentialsId: 'git-token', variable: 'GIT_TOKEN')]) {
+                        sh "git -c http.sslVerify=false push https://${GIT_TOKEN}@${gitRepo} HEAD:develop"
                     }
                 }
             }
@@ -59,16 +59,16 @@ pipeline {
                 branch "develop"
             }
             steps {
-                sh "git config --global user.email 'ruipedrorochamesquita@gmail.com'"
-                sh "git config --global user.name 'RuiMesquita'"
+                sh "git config --global user.email 'patricia.dias@celfocus.com'"
+                sh "git config --global user.name 'pdias16'"
                 sh "git checkout -f origin/master"
                 sh "git merge --ff ${env.GIT_COMMIT}"
                 script {
                     String pomVersion =  readMavenPom().getVersion()
                     sh "git tag ${pomVersion}"
                     String gitRepo = "${env.GIT_URL}".substring(8)
-                    withCredentials([usernamePassword(credentialsId: 'git-credentials', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
-                        sh "git -c http.sslVerify=false push https://${GIT_USERNAME}:${GIT_PASSWORD}@${gitRepo} HEAD:master ${pomVersion}"
+                    withCredentials([string(credentialsId: 'git-token', variable: 'GIT_TOKEN')]) {
+                        sh "git -c http.sslVerify=false push https://${GIT_TOKEN}@${gitRepo} HEAD:develop"
                     }
                 }
             }
