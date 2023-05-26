@@ -68,7 +68,7 @@ pipeline {
                     sh "git tag ${pomVersion}"
                     String gitRepo = "${env.GIT_URL}".substring(8)
                     withCredentials([string(credentialsId: 'git-token', variable: 'GIT_TOKEN')]) {
-                        sh "git -c http.sslVerify=false push https://${GIT_TOKEN}@${gitRepo} HEAD:develop"
+                        sh "git -c http.sslVerify=false push https://${GIT_TOKEN}@${gitRepo} HEAD:master"
                     }
                 }
             }
